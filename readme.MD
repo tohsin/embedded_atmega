@@ -25,3 +25,8 @@ Optimise diff options
 
 
 >avrdude -C /Applications/Arduino.app/Contents/Java/hardware/tools/avr/etc/avrdude.conf -v -p atmega328p -c USBasp -U flash:w:a.hex
+
+# Bash File
+chmod +x compile_upload.sh
+./compile_upload.sh /path/to/blink.c
+
