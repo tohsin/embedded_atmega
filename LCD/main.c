@@ -26,7 +26,7 @@ int main(void){
     while (1)
     {
         lcd_gotoxy(1,1);
-        lcd_print("hello world")
+        lcd_print("hello world");
 
     }
     
@@ -69,6 +69,22 @@ void lcd_command(unsigned char cmnd){
     _delay_us(20);
 }
 
+void lcdData ( unsigned char data ){
+    LCD_PORT = (LCD_PORT & 0x87) | (data & 0x78); //send high nibble to data pins in this case port6 to 3]
+    LCD_PORT |= (1<<LCD_RS); //rs = 0 when sendind information
+    LCD_PORT   &= ~(1<<LCD_RW); // rw = 0 when writing
+
+    LCD_PORT |= (1<<LCD_E); // High to low pulse for this useage   
+    _delay_us(1);
+    LCD_PORT &= ~(1<<LCD_E); 
+
+    LCD_PORT = (LCD_PORT & 0x87) | (data << 3);    
+    LCD_PORT |= (1<<LCD_E); // High to low pulse for this useage
+    _delay_us(1); // read datasheet require for E  
+    LCD_PORT &= ~(1<<LCD_E);
+}
+
+
 void  lcd_gotoxy (unsigned char x, unsigned char y){
     //Table 12-5
     unsigned char firstCharAdri[] = {0x80, 0xC0, 0x94, 0xD4} ;
@@ -84,9 +100,5 @@ void lcd_print(char* str){
         i++;
     }
     
-}
-
-void lcdData ( unsigned char data ){
-
 }
 
